@@ -1,0 +1,7 @@
+.board{
+    background-color: #999;
+    border: 5px solid #999;
+    width: 400px;
+    height: 400px;
+    border-radius: 10px;   
+}
