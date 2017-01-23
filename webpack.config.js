@@ -22,7 +22,15 @@ module.exports = {
             exclude: /node_modules/,
             loaders:['react-hot', 'babel?presets[]=react,presets[]=es2015']
 
-        }]
+        },
+        {
+            test: /\.scss$/,
+            loaders: ["style-loader", "css-loader", "sass-loader"]
+        },
+        ]
+    },
+    sassLoader: {
+      includePaths: [__dirname]
     },
     plugins:[
         new webpack.HotModuleReplacementPlugin(),

@@ -2,7 +2,9 @@ import React from 'react'
 
 function Tile(props){
     return(
-        <div>2</div>
+        <div className="tile">
+            <div>{props.num}</div>
+        </div>
     )
 }
 
@@ -11,44 +13,42 @@ class Board1024 extends React.Component{
         super(props)
         
         this.state = {
-            
+            boardState: this.createEmptyBoard()
         }
-        this.init();
+        
+        console.log(this.state.boardState)
     }
 
-    init(){
-        const totalTiles = 16
-        const rowTiles = 4;
-        const colTiles = 4;
-        const boardWidth = 500;
-        const gutter = 5;
-        let tileWidth;
-        let positionArray = new Array(4);
-
-
-        tileWidth = boardWidth/rowTiles;
-         console.log(rowTiles);
-        for(let r = 0; r < rowTiles; r++){
-            
-           for(let c = 0; c < colTiles; c++){
-                if(!positionArray[r]) positionArray[r] = new Array(4)
-                positionArray[r][c]= {x: gutter + c * tileWidth, y: gutter + r * tileWidth}
-           } 
+    createEmptyBoard(){
+        const tArr = [];        
+        for(let row = 0;row < 4; row++){
+            tArr.push([])
+            for(let col = 0; col < 4; col++){
+                tArr[row].push(null);
+            }
         }
-        console.log(positionArray)
+        return tArr;
     }
-
-    generateTile(){
-       
-       return <Tile>2</Tile>
-    }
-    
-    
 
     render(){
         return(
-            <div className="board">
-                {this.generateTile()}
+            <div className="board" >
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
+                <div className="grid-slot"></div>
             </div>
         )
     }
