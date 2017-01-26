@@ -23,10 +23,11 @@ module.exports = {
             loaders:['react-hot', 'babel?presets[]=react,presets[]=es2015']
 
         },
+
         {
             test: /\.scss$/,
-            loaders: ["style-loader", "css-loader", "sass-loader"]
-        },
+            loaders: ["style-loader", "css-loader",  "postcss-loader", "sass-loader"]
+        }
         ]
     },
     sassLoader: {
@@ -34,6 +35,7 @@ module.exports = {
     },
     plugins:[
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
+        require('autoprefixer')
     ]
 }

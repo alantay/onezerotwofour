@@ -1,51 +1,111 @@
+$tile-size: 100px;
+$tile-spacing: 20px;
+$board-size: 100px;
+
 *{
-    font-size: 16px;
+    font-size: 11px;
     font-family: Helvetic, Arial, "san serif";
     box-sizing: border-box;
 }
 
-.board{
+
+
+.board-container{
     background-color: #999;
     border: 5px solid #999;
     width: 520px;
     height: 520px;
     padding: 20px;
-    border-radius: 10px;
-    position: relative;   
+    border-radius: 10px;  
+    display: flex;
+}
+
+.board{
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
 .tile{
-    width: 100px;
-    height: 100px;
+    width: $tile-size;
+    height: $tile-size;
     background-color: #ccc;
     border-radius: 4px;
     text-align: center;
     position: absolute;
+    transition: 300ms ease-in-out;
+    transition-property: all;
     div{
         font-size: 5em;
-        width: 125px;
-        height: 125px;
-        line-height: 125px;
-
+        width: $tile-size;
+        height: $tile-size;
+        line-height: $tile-size;
     }
 }
 
 .grid-slot{
-    width: 100px;
-    height: 100px;
+    width: $tile-size;
+    height: $tile-size;
     background-color: #aaa;
     float: left;
-    margin-bottom: 20px;
+    margin-bottom: $tile-spacing;
 
     &:not(:nth-child(4n)){
-        margin-right: 20px;
+        margin-right: $tile-spacing;
     }
 }
 
-.pos-1-1{
 
+.fade-leave{
+    right: 50px 
 }
 
-.pos-1-2{
-    
+.fade-leave-active{
+    right: 0px 
+}
+
+@for $c from 1 through 4 {
+    @for $r from 1 through 4 {
+        .pos-#{$c}-#{$r} {
+            $row-minus-one: $r - 1;
+            $col-minus-one: $c - 1;
+            transform: translate( 
+                $tile-size * $col-minus-one + $tile-spacing * $col-minus-one,
+                $tile-size * $row-minus-one + $tile-spacing * $row-minus-one
+            );
+        }
+    }
+}
+
+
+.color-2{
+    background-color: #FFEA69;
+}
+
+.color-4{
+    background-color: #E89D73;
+}
+
+.color-8{
+    background-color: #FF8CF7;
+}
+
+.color-16{
+    background-color: #9BA5E8;
+}
+
+.color-32{
+    background-color: #7FFFDA;
+}
+
+.color-64{
+    background-color: #3EB2B2;
+}
+
+.color-128{
+    background-color: #FFF6B8;
+}
+
+.color-256{
+    background-color: #B25D90;
 }
