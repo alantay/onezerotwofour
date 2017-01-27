@@ -70,7 +70,7 @@ $board-size: 100px;
         .pos-#{$c}-#{$r} {
             $row-minus-one: $r - 1;
             $col-minus-one: $c - 1;
-        
+            
             transform: translate( 
                 $tile-size * $col-minus-one + $tile-spacing * $col-minus-one,
                 $tile-size * $row-minus-one + $tile-spacing * $row-minus-one

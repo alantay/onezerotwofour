@@ -14,8 +14,8 @@ const KEYCODE ={
 
 function Tile(props){
     return(
-        <div className={"tile " +props.className+" color-"+props.data.value} data-ukey={props.ukey}>
-            <div>{props.data.value}</div>
+        <div className={"tile " +props.className+" color-"+props.value} data-ukey={props.ukey}>
+            <div>{props.value}</div>
         </div>
         )
 }
@@ -27,25 +27,25 @@ function Board(props){
     
     //styling the tile base on info from boardstate
     _.times(boardState.length,(col)=>{
-     _.times(boardState[col].length,(row)=>{
-
-        if(boardState[col][row].value){
-            let data = boardState[col][row]
-            let key = data.key
-            tiles.push(
-                <Tile 
-                    data={data} 
-                    row={row} 
-                    col={col} 
-                    key={key} 
-                    ukey= {key} 
-                    className={"pos-" + (col+1) + "-" + (row+1)}>
-                </Tile>
-            )
-        }
+        _.times(boardState[col].length,(row)=>{
+            let grid = boardState[col][row]
+            if(grid.tile.length){
+                _.each(grid.tile, (obj, k)=>{
+                    let key = obj.key;
+                    tiles.push(
+                        <Tile 
+                            {...obj}
+                            row={row} 
+                            col={col} 
+                            ukey={obj.key}
+                            className={"pos-" + (col+1) + "-" + (row+1)}>
+                        > 
+                        </Tile>
+                    )
+                })
+            }
+        })
     })
-})
-
     _.times(16,(i)=>{
         grids.push(<div className="grid-slot" key={i}></div>)
     })
@@ -70,7 +70,7 @@ class Board1024 extends React.Component{
                 _.times(numOfRow,(c)=>{
                     tArr.push([])
                     _.times(numOfCol,()=>{
-                        tArr[c].push({value: null});
+                        tArr[c].push({tile:[]});
                     })
                 })
                 
@@ -84,7 +84,6 @@ class Board1024 extends React.Component{
 
                         }
                         
-
                         if(ck<3){
                             tArr[ck][rk].right = tArr[ck+1][rk]     
                         }
@@ -114,19 +113,27 @@ class Board1024 extends React.Component{
         // log all unoccupied grid into unoccupiedGrid
         _.times(boardState.length,(col)=>{
             _.times(boardState[col].length,(row)=>{
-                if(!boardState[col][row].value){
+                // if(!boardState[col][row].tile) boardState[col][row].tile =[]
+                if(!boardState[col][row].tile.length){
                     unoccupiedGrid.push(col+" "+row)
                 }
             })
         })
         
-        // select random tile
-        let gridToPopulate = _.sample(unoccupiedGrid).split(" ") 
+        // select random grid
+        let gridToPopulate = _.sample(unoccupiedGrid).split(" ")
+
+        // col 
         let c = gridToPopulate[0]
+
+        // roll
         let r = gridToPopulate[1]
-        boardState[c][r].value = 2 
-        boardState[c][r].key = key
+
+        // populate grid with tile
+        // boardState[c][r].tile = []
+        boardState[c][r].tile.push({value: 2, key: key}) 
         
+        // update boardstate
         this.setState({
             boardState: boardState
         });
@@ -135,36 +142,55 @@ class Board1024 extends React.Component{
     moveTiles(direction){
         let boardState = this.state.boardState
         let anyTileMoved = false
-        let func = (cv,ck, rv, rk)=>{
-            if(boardState[ck][rk].value){
+
+
+        let movement = (cv,ck, rv, rk)=>{
+            if(boardState[ck][rk].tile.length){
                 let head = boardState[ck][rk]
+                let headTile = _.last(boardState[ck][rk].tile)
+                
                 // current is the iterated node
                 let current = head
+
+                let currentTile = null
                 let move = false
                 let valueUp = false
 
                 // iterating through linked list
-                while(
+
                 // while the current node has a node above
-                current[direction] &&
-                // and while that node above has the same value as the current node
-                // or that node is empty
-                (current[direction].value == head.value || current[direction].value == null)
-                ){
-                    // the value of tile increase when 2 tile is the same number
-                    if(current[direction].value == head.value && current[direction].value){
+                while(current[direction])
+                {
+                    // if there is a tile on the direction, choose its last tile
+                    currentTile = _.last(current[direction].tile)
+                    
+                    // if there is a tile on the direction
+                    if(currentTile){
+                        // break away while loop if tile on direction is of different value
+                        if(currentTile.value != headTile.value) break
                         valueUp = true
+                        move = true
+                    }else{
+                        move = true
                     }
+                    
                     // move the current node up
                     current = current[direction]
-                    move = true
+                    
                 }
 
                 if(move){
-                    current.value = valueUp? head.value * 2 : head.value 
-                    current.key = head.key
-                    head.value = null
-                    head.key = null
+                    key++
+                    if(valueUp){
+                        
+                        current.tile.push({value: headTile.value * 2, key: key})
+                    }else{
+                        current.tile.push({value: headTile.value, key: key})
+                    }
+                    
+                    // currentTile.value = valueUp? headTile.value * 2 : headTile.value 
+                    // currentTile.key = headTile.key
+                    boardState[ck][rk].tile = []
                     anyTileMoved = true
                 }
                 
@@ -175,21 +201,21 @@ class Board1024 extends React.Component{
         if(direction == 'up' || direction == 'left'){
             _.each(boardState,(cv, ck)=>{
                 _.each(boardState[ck], (rv,rk)=>{
-                    func(cv,ck,rv,rk)
+                    movement(cv,ck,rv,rk)
                 })
             })
         }
         if(direction == 'down'){
             _.each(boardState,(cv, ck)=>{
                 _.eachRight(boardState[ck], (rv,rk)=>{
-                    func(cv,ck,rv,rk)
+                    movement(cv,ck,rv,rk)
                 })
             })
         }  
         if(direction == 'right'){
             _.eachRight(boardState,(cv, ck)=>{
                 _.each(boardState[ck], (rv,rk)=>{
-                    func(cv,ck,rv,rk)
+                    movement(cv,ck,rv,rk)
                 })
             })
         } 
