@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group' // TODO: delete this if not using
+
 let _ = require('lodash');
 let key = 0
 let numOfRow = 4
@@ -182,10 +182,10 @@ class Board1024 extends React.Component{
                 if(move){
                     key++
                     if(valueUp){
-                        
+                        current.tile.push({value: headTile.value, key: headTile.key})
                         current.tile.push({value: headTile.value * 2, key: key})
                     }else{
-                        current.tile.push({value: headTile.value, key: key})
+                        current.tile.push({value: headTile.value, key: headTile.key})
                     }
                     
                     // currentTile.value = valueUp? headTile.value * 2 : headTile.value 
