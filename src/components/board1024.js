@@ -13,8 +13,14 @@ const KEYCODE ={
 }
 
 function Tile(props){
+    let style = {
+        zIndex : props.ukey
+    }
+    
+    let tileMerged = props.tileMerged || ''
+    let tileNew = props.tileNew || ''
     return(
-        <div className={"tile " +props.className+" color-"+props.value} data-ukey={props.ukey}>
+        <div className={"tile " +props.className+" color-"+props.value+ ' '+tileMerged+' '+tileNew} data-ukey={props.ukey}  style={style}>
             <div>{props.value}</div>
         </div>
         )
@@ -23,7 +29,6 @@ function Tile(props){
 function Board(props){
     let boardState = props.boardState;
     let tiles = [];
-    let grids = [];
     
     //styling the tile base on info from boardstate
     _.times(boardState.length,(col)=>{
@@ -46,16 +51,29 @@ function Board(props){
             }
         })
     })
-    _.times(16,(i)=>{
-        grids.push(<div className="grid-slot" key={i}></div>)
-    })
 
+
+    tiles.sort((a, b) => b.props.ukey - a.props.ukey)
+    
     return(
         <div className="board">
-        {grids}
+        <Grid/>
         {tiles}
         </div>
         )
+}
+
+
+function Grid(){
+     let grids = [];
+    _.times(16,(i)=>{
+        grids.push(<div className="grid-slot" key={i}></div>)
+    })
+    return(
+        <div>
+        {grids}
+        </div>
+    )
 }
 
 class Board1024 extends React.Component{
@@ -131,7 +149,7 @@ class Board1024 extends React.Component{
 
         // populate grid with tile
         // boardState[c][r].tile = []
-        boardState[c][r].tile.push({value: 2, key: key}) 
+        boardState[c][r].tile.push({value: 2, key: key, tileNew:'tile-new'}) 
         
         // update boardstate
         this.setState({
@@ -147,7 +165,8 @@ class Board1024 extends React.Component{
         let movement = (cv,ck, rv, rk)=>{
             if(boardState[ck][rk].tile.length){
                 let head = boardState[ck][rk]
-                let headTile = _.last(boardState[ck][rk].tile)
+                head.tile =  head.tile.slice(-1 * 1);
+                let headTile = head.tile[0]
                 
                 // current is the iterated node
                 let current = head
@@ -162,7 +181,10 @@ class Board1024 extends React.Component{
                 while(current[direction])
                 {
                     // if there is a tile on the direction, choose its last tile
+                    if(current[direction].tile.length>1) break
                     currentTile = _.last(current[direction].tile)
+
+
                     
                     // if there is a tile on the direction
                     if(currentTile){
@@ -182,14 +204,13 @@ class Board1024 extends React.Component{
                 if(move){
                     key++
                     if(valueUp){
+
                         current.tile.push({value: headTile.value, key: headTile.key})
-                        current.tile.push({value: headTile.value * 2, key: key})
+                        current.tile.push({value: headTile.value * 2, key: key, tileMerged: 'tile-merged'})
                     }else{
-                        current.tile.push({value: headTile.value, key: headTile.key})
+                        current.tile.push({value: headTile.value, key: headTile.key, tileMerged:'', tileNew:''})
                     }
                     
-                    // currentTile.value = valueUp? headTile.value * 2 : headTile.value 
-                    // currentTile.key = headTile.key
                     boardState[ck][rk].tile = []
                     anyTileMoved = true
                 }
