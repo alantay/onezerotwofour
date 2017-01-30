@@ -1,5 +1,6 @@
 import React from 'react'
 
+let Swipeable = require('react-swipeable')
 let _ = require('lodash');
 let key = 0
 let numOfRow = 4
@@ -279,12 +280,37 @@ class Board1024 extends React.Component{
         document.removeEventListener("keydown", this.handleKeyDown.bind(this), false);
     }
 
+
+    onSwipedUp(){
+        this.moveTiles('up')
+    }
+
+    onSwipedRight(){
+        this.moveTiles('right')
+    }
+
+    onSwipedDown(){
+        console.log('hey')
+    }
+
+    onSwipedLeft(){
+        console.log('hey')
+    }
+
+
+
     render(){
         return(
+            <Swipeable 
+                onSwipedUp={this.swipedUp}
+                onSwipedRight={this.swipedRight}
+                onSwipedDown={this.swipedDown}
+                onSwipedLeft={this.swipedLeft}>
             <div className="board-container">
             <Board boardState = {this.state.boardState}>
             </Board>
             </div>
+            </Swipeable>
             )
     }
 
