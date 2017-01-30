@@ -1,8 +1,7 @@
 import React from 'react'
 
 let _ = require('lodash');
-
-let Hammer = require('react-hammerjs');
+let  Swipeable = require('react-swipeable')
 let key = 0
 let numOfRow = 4
 let numOfCol= 4
@@ -254,7 +253,6 @@ class Board1024 extends React.Component{
         switch(evt.keyCode){
             case KEYCODE.UP:
             this.moveTiles('up')
-            
             break;
 
             case KEYCODE.DOWN:
@@ -281,24 +279,40 @@ class Board1024 extends React.Component{
         document.removeEventListener("keydown", this.handleKeyDown.bind(this), false);
     }
 
-    handleSwipe(){
-        console.log('handle')
+    swipedUp(){
+        this.moveTiles('up')
     }
 
-    handleTap(){
-        console.log('tap')
+    swipedRight(){
+        this.moveTiles('right')
+    }
+
+    swipedDown(){
+        this.moveTiles('down')
+    }
+
+    swipedLeft(){
+        this.moveTiles('left')
     }
 
 
-
+    
+    
     render(){
+
+
         return(
-            <Hammer onTap={this.handleTap} onSwipe={this.handleSwipe}>
+            <Swipeable 
+                onSwipedUp={this.swipedUp.bind(this)}
+                onSwipedRight={this.swipedRight.bind(this)}
+                onSwipedDown={this.swipedDown.bind(this)}
+                onSwipedLeft={this.swipedLeft.bind(this)}
+            >
             <div className="board-container">
             <Board boardState = {this.state.boardState}>
             </Board>
             </div>
-            </Hammer>
+            </Swipeable>
             )
     }
 
