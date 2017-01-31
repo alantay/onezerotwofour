@@ -19,7 +19,7 @@ $font-size-small: 3em;
 
 body{
     margin:0;
-    padding: 0;
+    padding: 0;    
 
 }
 
@@ -138,39 +138,48 @@ body{
     }
 }
 
-
-.color-2 div{
-    background-color: #FFEA69;
+.color-base div{
+    background-color: #6A73CC;
 }
 
-.color-4 div{
-    background-color: #E89D73;
-}
+.color-base{
+    &.color-2 div{
+        background-color: #FFEA69;
+    }
 
-.color-8 div{
-    background-color: #FF8CF7;
-}
+    &.color-4 div{
+        background-color: #E89D73;
+    }
 
-.color-16 div{
-    background-color: #9BA5E8;
-}
+    &.color-8 div{
+        background-color: #FF8CF7;
+    }
 
-.color-32 div{
-    background-color: #7FFFDA;
-}
+    &.color-16 div{
+        background-color: #9BA5E8;
+    }
 
-.color-64 div{
-    background-color: #3EB2B2;
-}
+    &.color-32 div{
+        background-color: #7FFFDA;
+    }
 
-.color-128 div{
-    background-color: #FFF6B8;
-}
+    &.color-64 div{
+        background-color: #3EB2B2;
+    }
 
-.color-256 div{
-    background-color: #B25D90;
-}
+    &.color-128 div{
+        background-color: #FFF6B8;
+    }
 
+    &.color-256 div{
+        background-color: #B25D90;
+    }
+
+    &.color-512 div{
+        background-color: #D1FFB8;
+    }
+
+}
 
 
 

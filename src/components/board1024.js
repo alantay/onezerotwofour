@@ -1,10 +1,13 @@
 import React from 'react'
 
+
+
 let _ = require('lodash');
 let  Swipeable = require('react-swipeable')
 let key = 0
 let numOfRow = 4
 let numOfCol= 4
+let tilesMoving = false
 const KEYCODE ={
     UP: 38,
     DOWN: 40,
@@ -21,7 +24,7 @@ function Tile(props){
     let tileMerged = props.tileMerged || ''
     let tileNew = props.tileNew || ''
     return(
-        <div className={"tile " +props.className+" color-"+props.value+ ' '+tileMerged+' '+tileNew} data-ukey={props.ukey}  style={style}>
+        <div className={"tile color-base " +props.className+" color-"+props.value+ ' '+tileMerged+' '+tileNew} data-ukey={props.ukey}  style={style}>
             <div>{props.value}</div>
         </div>
         )
@@ -149,8 +152,10 @@ class Board1024 extends React.Component{
         let r = gridToPopulate[1]
 
         // populate grid with tile
-        // boardState[c][r].tile = []
-        boardState[c][r].tile.push({value: 2, key: key, tileNew:'tile-new'}) 
+        // generated tile value is 90% 2 and 10% 4
+        let value = Math.random() < 0.9 ? 2 : 4
+
+        boardState[c][r].tile.push({value: value, key: key, tileNew:'tile-new'}) 
         
         // update boardstate
         this.setState({
@@ -159,6 +164,9 @@ class Board1024 extends React.Component{
     }
 
     moveTiles(direction){
+        if(tilesMoving) return
+        tilesMoving = true
+        setTimeout(function(){ tilesMoving = false }, 100)
         let boardState = this.state.boardState
         let anyTileMoved = false
 
@@ -246,6 +254,7 @@ class Board1024 extends React.Component{
         this.setState({
             boardState: boardState
         });
+
     }
     
     handleKeyDown(evt){
@@ -295,9 +304,6 @@ class Board1024 extends React.Component{
         this.moveTiles('left')
     }
 
-
-    
-    
     render(){
 
 

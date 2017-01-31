@@ -2,7 +2,8 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-    devtool: 'inline-source-map',
+    // devtool: 'inline-source-map',
+    devtool: 'cheap-module-source-map',
     entry: [
         'webpack-dev-server/client?http://127.0.0.1:8080',
         'webpack/hot/only-dev-server',
@@ -36,6 +37,15 @@ module.exports = {
     plugins:[
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        require('autoprefixer')
+        // new webpack.optimize.UglifyJsPlugin(),
+        require('autoprefixer'),
+        new webpack.DefinePlugin({ // <-- key to reducing React's size
+             'process.env': {
+               'NODE_ENV': JSON.stringify('production')
+             }
+           }),
+           new webpack.optimize.DedupePlugin(), //dedupe similar code 
+           new webpack.optimize.UglifyJsPlugin(), //minify everything
+           new webpack.optimize.AggressiveMergingPlugin()//Merge chunks 
     ]
 }
