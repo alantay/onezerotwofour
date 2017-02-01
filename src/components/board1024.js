@@ -192,8 +192,6 @@ class Board1024 extends React.Component{
                     if(current[direction].tile.length>1) break
                     currentTile = _.last(current[direction].tile)
 
-
-                    
                     // if there is a tile on the direction
                     if(currentTile){
                         // break away while loop if tile on direction is of different value
@@ -248,6 +246,7 @@ class Board1024 extends React.Component{
                 })
             })
         } 
+        if(this.checkMovesLeft(boardState)) console.log('dieeeee la')
         if(!anyTileMoved) return
         this.addRandomTile();
         this.setState({
@@ -303,11 +302,32 @@ class Board1024 extends React.Component{
         this.moveTiles('left')
     }
 
-    checkBoardState(){
+    checkMovesLeft(boardState){
+        // console.log(boardState)
+        let move =false
+        console.log('in')
+        _.each(boardState,(cv,ck)=>{
+            console.log('ina')
+            if(cv.left){
+                let head = cv
+                let left = head
+                
+                while(left){
 
+                    //left is empty, move can be made
+                    if(left.value == null) move=true; break
+                    
+                    //left is same number, move can be made
+                    if(cv.left.value == head.value) move=true; break
+                    left = left.left
+                }
+            }
+
+        })
+        return move
     }
 
-    gameOver(isWin){
+    gameOver(){
 
     }
 
