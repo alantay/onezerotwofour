@@ -1,10 +1,11 @@
 import React from 'react'
 
-let _ = require('lodash');
-let Swipeable = require('react-swipeable')
+const _ = require('lodash');
+const Swipeable = require('react-swipeable')
 let key = 0
-let numOfRow = 4
-let numOfCol= 4
+const numOfRow = 4
+const numOfCol= 4
+let isGameOver = false
 let tilesMoving = false
 const KEYCODE ={
     UP: 38,
@@ -163,6 +164,7 @@ class Board1024 extends React.Component{
     }
 
     moveTiles(direction){
+        if(isGameOver) return
         if(tilesMoving) return
         tilesMoving = true
         setTimeout(function(){ tilesMoving = false }, 100)
@@ -173,6 +175,8 @@ class Board1024 extends React.Component{
         let movement = (cv,ck, rv, rk)=>{
             if(boardState[ck][rk].tile.length){
                 let head = boardState[ck][rk]
+
+                //remove all but the last tile from head
                 head.tile =  head.tile.slice(-1 * 1);
                 let headTile = head.tile[0]
                 
@@ -246,9 +250,11 @@ class Board1024 extends React.Component{
                 })
             })
         } 
-        if(this.checkMovesLeft(boardState)) console.log('dieeeee la')
+        
         if(!anyTileMoved) return
         this.addRandomTile();
+
+        if(!this.checkMovesLeft(boardState)) this.gameOver()
         this.setState({
             boardState: boardState
         });
@@ -303,32 +309,37 @@ class Board1024 extends React.Component{
     }
 
     checkMovesLeft(boardState){
-        // console.log(boardState)
         let move =false
-        console.log('in')
         _.each(boardState,(cv,ck)=>{
-            console.log('ina')
-            if(left){
-                let head = cv
-                let left = head
-                
-                while(left){
-
-                    //left is empty, move can be made
-                    if(left.value == null) move=true; break
-                    
-                    //left is same number, move can be made
-                    if(cv.left.value == head.value) move=true; break
-                    left = left.left
-                }
-            }
+             _.each(boardState[ck],(rv,rk)=>{
+                if(this.checkMovesLeftHelper(rv,"up")) move =true
+                if(this.checkMovesLeftHelper(rv,"down")) move =true
+                if(this.checkMovesLeftHelper(rv,"left")) move =true
+                if(this.checkMovesLeftHelper(rv,"right")) move =true
+            })
 
         })
         return move
     }
+    
+    checkMovesLeftHelper(rv, direction){
+        let current = rv
+        let left = current[direction]
+        let move = false    
+        if(left && current.tile.length){
+            let currentTile = _.last(current.tile)
+            let leftTile = _.last(left.tile) 
+            
+            if(!leftTile) move = true
+
+            if(leftTile && currentTile.value == leftTile.value) move = true
+        }
+        return move
+    }
 
     gameOver(){
-
+        isGameOver = true
+        
     }
 
     render(){
