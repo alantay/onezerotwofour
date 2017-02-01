@@ -1,9 +1,7 @@
 import React from 'react'
 
-
-
 let _ = require('lodash');
-let  Swipeable = require('react-swipeable')
+let Swipeable = require('react-swipeable')
 let key = 0
 let numOfRow = 4
 let numOfCol= 4
@@ -161,6 +159,7 @@ class Board1024 extends React.Component{
         this.setState({
             boardState: boardState
         });
+
     }
 
     moveTiles(direction){
@@ -304,9 +303,15 @@ class Board1024 extends React.Component{
         this.moveTiles('left')
     }
 
+    checkBoardState(){
+
+    }
+
+    gameOver(isWin){
+
+    }
+
     render(){
-
-
         return(
             <Swipeable 
                 onSwipedUp={this.swipedUp.bind(this)}
