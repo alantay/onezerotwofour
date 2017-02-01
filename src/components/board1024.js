@@ -308,7 +308,7 @@ class Board1024 extends React.Component{
         console.log('in')
         _.each(boardState,(cv,ck)=>{
             console.log('ina')
-            if(cv.left){
+            if(left){
                 let head = cv
                 let left = head
                 
